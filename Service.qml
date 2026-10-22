@@ -92,8 +92,23 @@ Item {
   property string _queuedHelper: ""
   property real _pausedUntil: 0
 
+  // Every bar (one per monitor) calls this, and each briefly reports empty
+  // settings while the shell starts. Act on the value they settle on, not on
+  // each call, or the flip-flopping kills the token check before it finishes.
+  property string _pendingClientId: ""
+
   function configure(settings) {
-    var id = Model.normalizeClientId(settings ? settings.clientId : "")
+    _pendingClientId = Model.normalizeClientId(settings ? settings.clientId : "")
+    configureTimer.restart()
+  }
+
+  Timer {
+    id: configureTimer
+    interval: 300
+    onTriggered: root._applyClientId(root._pendingClientId)
+  }
+
+  function _applyClientId(id) {
     if (id === clientId) return
     clientId = id
     _accessToken = ""
@@ -153,7 +168,8 @@ Item {
   function runHelper(mode) {
     if (!clientId) return
     if (helper.running) {
-      if (helper.mode === mode && mode === "token") return
+      // A live token refresh already answers this one; a discarded one won't.
+      if (helper.mode === mode && mode === "token" && !helper.discard) return
       _queuedHelper = mode
       if (helper.mode === "login" && mode === "logout") _stopHelper()
       return
@@ -206,7 +222,7 @@ Item {
         if (kind === "offline") retryTimer.restart()
       }
     }
-    _runQueuedHelper()
+    Qt.callLater(root._runQueuedHelper)
   }
 
   function _flushWaiting(token) {
@@ -408,7 +424,9 @@ Item {
     onExited: function(exitCode, exitStatus) {
       if (helper.discard) {
         helper.discard = false
-        root._runQueuedHelper()
+        // `running` can still read true inside this handler; start the next
+        // helper once the process has fully gone.
+        Qt.callLater(root._runQueuedHelper)
       } else {
         root.helperFinished(helper.mode, helper.lastLine)
       }

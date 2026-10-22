@@ -135,8 +135,9 @@ ruff check . && ruff format --check .
 
 To work on a checkout, link it into the plugin folder:
 `ln -s "$PWD" ~/.config/omarchy/plugins/atlastimed.tunemarchy`, then
-`omarchy-shell shell rescanPlugins`. The bar widget hot-reloads on save; changes
-to `Service.qml` or `Model.js` need `omarchy restart shell`.
+`omarchy-shell shell rescanPlugins`. The shell's file watcher does not follow
+symlinks, so load your edits with `omarchy restart shell`; a rescan alone can
+leave the previous `Service.qml` running.
 
 ## License
 
