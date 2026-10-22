@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "id": "atlastimed.tunemarchy",
+  "name": "Tunemarchy",
+  "version": "0.1.0",
+  "author": "atlastimed",
+  "license": "MIT",
+  "description": "Spotify in the Omarchy bar: now playing, seek, shuffle, repeat and volume over MPRIS, plus optional liked songs, up-next queue and Connect devices.",
+  "kinds": ["service", "bar-widget"],
+  "entryPoints": {
+    "service": "Service.qml",
+    "barWidget": "BarWidget.qml"
+  },
+  "barWidget": {
+    "displayName": "Tunemarchy",
+    "description": "What Spotify is playing, with a dropdown for seek, transport, volume, likes, the queue and Connect devices.",
+    "category": "Media",
+    "aliases": ["spotify", "music", "player", "media", "tunemarchy"],
+    "allowMultiple": false,
+    "defaultSection": "right",
+    "defaults": {
+      "showArtist": true,
+      "maxWidth": 240,
+      "whenClosed": "icon",
+      "scrollAction": "volume",
+      "clientId": ""
+    },
+    "schema": [
+      {
+        "key": "showArtist",
+        "type": "boolean",
+        "label": "Show artist in the bar",
+        "defaultValue": true
+      },
+      {
+        "key": "maxWidth",
+        "type": "integer",
+        "label": "Maximum label width (px)",
+        "min": 0,
+        "max": 800,
+        "step": 20,
+        "defaultValue": 240,
+        "description": "Longer titles are shortened with an ellipsis. 0 shows only the icon."
+      },
+      {
+        "key": "whenClosed",
+        "type": "enum",
+        "label": "When Spotify is closed",
+        "options": ["icon", "hide"],
+        "defaultValue": "icon",
+        "description": "icon: keep a dimmed icon that opens Spotify. hide: remove the widget until Spotify starts."
+      },
+      {
+        "key": "scrollAction",
+        "type": "enum",
+        "label": "Scrolling on the widget",
+        "options": ["volume", "skip", "off"],
+        "defaultValue": "volume",
+        "description": "volume changes Spotify's volume; skip goes to the previous or next song."
+      },
+      {
+        "key": "clientId",
+        "type": "string",
+        "label": "Spotify app Client ID (optional)",
+        "defaultValue": "",
+        "description": "Turns on likes, the queue and Connect devices. Create an app at developer.spotify.com/dashboard with redirect URI http://127.0.0.1:43117/callback, then paste its Client ID here. No client secret is needed."
+      }
+    ]
+  }
+}
