@@ -19,7 +19,7 @@ test('companion snapshot rejects invalid protocols and bounds collections', () =
 test('network artwork and shared tooltip sinks reject unwanted resources', () => {
   for (const url of ['file:///etc/passwd','https://example.com/a','https://i.scdn.co.attacker.test/a','http://i.scdn.co/a']) assert.equal(model.safeArt(url),'');
   assert.equal(model.safeArt('https://i.scdn.co/image/abc'), 'https://i.scdn.co/image/abc');
-  assert.equal(model.tooltipText('<img src="https://example.com"> & title'), '&lt;img src="https://example.com"&gt; &amp; title');
+  assert.equal(model.tooltipText('<img src="https://example.com"> & title'), '<span>&lt;img src="https://example.com"&gt; &amp; title</span>');
 });
 test('settings and controls handle malformed values and limits', () => {
   assert.equal(model.flag('false',true),false);

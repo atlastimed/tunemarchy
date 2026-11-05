@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls as QQC
 import qs.Commons
+import qs.Commons as Commons
 import qs.Ui
 import "Model.js" as Model
 
@@ -14,7 +15,7 @@ Panel {
   readonly property string viewerKey: "tunemarchy-panel-" + String(root)
   property string expanded: ""
   property string cursor: "play"
-  readonly property color foreground: bar ? bar.foreground : Color.foreground
+  readonly property color foreground: bar ? bar.foreground : Commons.Color.foreground
   readonly property string fontFamily: bar ? bar.fontFamily : Style.font.family
   readonly property bool available: spotify && spotify.connected
   readonly property bool hasTrack: available && spotify.title !== ""
@@ -127,7 +128,7 @@ Panel {
               id: art
               width: Style.space(80)
               height: width
-              Rectangle { anchors.fill: parent; color: Style.normalFillFor(root.foreground, Color.accent); radius: Style.cornerRadius }
+              Rectangle { anchors.fill: parent; color: Style.normalFillFor(root.foreground, Commons.Color.accent); radius: Style.cornerRadius }
               Image {
                 id: cover
                 anchors.fill: parent

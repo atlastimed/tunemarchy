@@ -13,7 +13,7 @@ CursorSurface {
   signal pointed()
   implicitWidth: content.implicitWidth + Style.spacing.controlPaddingX * 2
   implicitHeight: Math.max(Style.spacing.controlHeight, content.implicitHeight + Style.spacing.controlPaddingY * 2)
-  opacity: enabled ? 1 : 0.4
+  opacity: enabled || current ? 1 : 0.4
   Accessible.role: Accessible.Button
   Accessible.name: tooltipText || text
   Accessible.onPressAction: if (enabled) clicked()

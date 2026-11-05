@@ -16,8 +16,11 @@ omarchy bar set io.github.atlastimed.omaspotify showBarWidget false --json
 ```
 
 Click Tunemarchy and choose **Open** to set up OmaSpotify. A personal Spotify
-Premium account is required. OmaSpotify guides you through its account and
-local playback authorizations; Tunemarchy has no additional sign-in.
+Premium account and your own Spotify Developer app are required. Add
+`http://127.0.0.1:8989/login` to that app’s Redirect URIs, then enter its client
+ID in OmaSpotify. For local audio, OmaSpotify guides you through installing
+Spotify Soloist, saving a personal Soloist key and pairing once through the
+official Spotify app. Tunemarchy has no additional sign-in or API key.
 
 ## Controls
 
@@ -93,7 +96,7 @@ TUNEMARCHY_SOURCE=/path/to/tunemarchy scripts/test-companion.sh
 
 Install a Git checkout as a real directory under `~/.config/omarchy/plugins/`.
 A symlink is not watched reliably. Validate with `omarchy plugin validate`,
-then use `omarchy-shell shell rescanPlugins` to reload without restarting the
-shell. Never edit Omarchy's packaged components.
+then use `omarchy-shell shell rescanPlugins`. If changed QML remains cached,
+restart the shell after saving your work with `omarchy restart shell`. Never edit Omarchy's packaged components.
 
 MIT — see [LICENSE](LICENSE).

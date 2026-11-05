@@ -33,7 +33,7 @@ function barLabel(title, artist, showArtist) {
 }
 // Shared Omarchy tooltip components use AutoText.
 function tooltipText(value) {
-  return String(value || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+  return "<span>" + String(value || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</span>"
 }
 function safeArt(value) {
   var url = String(value || "")
