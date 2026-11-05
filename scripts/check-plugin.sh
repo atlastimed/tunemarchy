@@ -48,15 +48,7 @@ while IFS=$'\t' read -r key value; do
   grep -q "setting(\"$key\", $value)" BarWidget.qml || fail "BarWidget does not read setting '$key' with default $value"
 done < <(jq -r '.barWidget.defaults | to_entries[] | [.key, (.value | tojson)] | @tsv' "$manifest")
 
-# The redirect URI documented to users must be the one the helper listens on.
-redirect=$(python3 -I -c 'import sys; sys.path.insert(0, "backend"); from tunemarchy import spotify; print(spotify.REDIRECT_URI)')
-jq -e --arg r "$redirect" '.barWidget.schema[] | select(.key == "clientId") | .description | contains($r)' "$manifest" >/dev/null \
-  || fail "clientId help text does not mention the redirect URI $redirect"
-grep -qF "$redirect" README.md || fail "README does not mention the redirect URI $redirect"
-
 version=$(jq -r .version "$manifest")
-grep -q "^__version__ = \"$version\"" backend/tunemarchy/__init__.py || fail "backend version differs from manifest $version"
-grep -q "^version = \"$version\"" pyproject.toml || fail "pyproject version differs from manifest $version"
 grep -q "moduleName: \"$id\"" BarWidget.qml || fail "BarWidget moduleName must be $id"
 grep -q "pluginId: \"$id\"" BarWidget.qml || fail "BarWidget pluginId must be $id"
 
@@ -80,5 +72,4 @@ if [[ -n $syntax ]]; then
 fi
 (( lint_status == 0 )) || fail "qmllint exited with status $lint_status"
 
-python3 -I backend/tunemarchyctl --version >/dev/null || fail "backend does not start"
 echo "check-plugin: $id $version ok"

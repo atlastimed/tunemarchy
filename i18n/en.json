@@ -1,0 +1,21 @@
+{
+  "title": "OmaSpotify",
+  "ready": "Ready when you are",
+  "unavailable": "Open OmaSpotify to get connected.",
+  "open": "Open OmaSpotify",
+  "openShort": "Open",
+  "queue": "Queue",
+  "devices": "Devices",
+  "like": "Save to Liked Songs (f)",
+  "unlike": "Remove from Liked Songs (f)",
+  "shuffle": "Shuffle (s)",
+  "previous": "Previous (p)",
+  "next": "Next (n)",
+  "repeat": "Repeat (r)",
+  "play": "Play",
+  "pause": "Pause",
+  "loading": "Loading\u2026",
+  "emptyQueue": "Your queue is empty.",
+  "emptyDevices": "No devices found.",
+  "signIn": "Sign in through OmaSpotify to access your music."
+}

@@ -2,28 +2,36 @@
   "schemaVersion": 1,
   "id": "atlastimed.tunemarchy",
   "name": "Tunemarchy",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "atlastimed",
   "license": "MIT",
-  "description": "Spotify in the Omarchy bar: now playing, seek, shuffle, repeat and volume over MPRIS, plus optional liked songs, up-next queue and Connect devices.",
-  "kinds": ["service", "bar-widget"],
+  "description": "Compact OmaSpotify companion: album art, playback controls, expandable queue and devices.",
+  "kinds": [
+    "service",
+    "bar-widget"
+  ],
   "entryPoints": {
     "service": "Service.qml",
     "barWidget": "BarWidget.qml"
   },
   "barWidget": {
     "displayName": "Tunemarchy",
-    "description": "What Spotify is playing, with a dropdown for seek, transport, volume, likes, the queue and Connect devices.",
+    "description": "Compact OmaSpotify companion: album art, playback controls, expandable queue and devices.",
     "category": "Media",
-    "aliases": ["spotify", "music", "player", "media", "tunemarchy"],
+    "aliases": [
+      "spotify",
+      "music",
+      "player",
+      "media",
+      "tunemarchy"
+    ],
     "allowMultiple": false,
     "defaultSection": "right",
     "defaults": {
       "showArtist": true,
       "maxWidth": 240,
       "whenClosed": "icon",
-      "scrollAction": "volume",
-      "clientId": ""
+      "scrollAction": "volume"
     },
     "schema": [
       {
@@ -45,25 +53,25 @@
       {
         "key": "whenClosed",
         "type": "enum",
-        "label": "When Spotify is closed",
-        "options": ["icon", "hide"],
+        "label": "When nothing is playing",
+        "options": [
+          "icon",
+          "hide"
+        ],
         "defaultValue": "icon",
-        "description": "icon: keep a dimmed icon that opens Spotify. hide: remove the widget until Spotify starts."
+        "description": "Keep the icon available or hide it until OmaSpotify has a player."
       },
       {
         "key": "scrollAction",
         "type": "enum",
         "label": "Scrolling on the widget",
-        "options": ["volume", "skip", "off"],
+        "options": [
+          "volume",
+          "skip",
+          "off"
+        ],
         "defaultValue": "volume",
         "description": "volume changes Spotify's volume; skip goes to the previous or next song."
-      },
-      {
-        "key": "clientId",
-        "type": "string",
-        "label": "Spotify app Client ID (optional)",
-        "defaultValue": "",
-        "description": "Turns on likes, the queue and Connect devices. Create an app at developer.spotify.com/dashboard with redirect URI http://127.0.0.1:43117/callback, then paste its Client ID here. No client secret is needed."
       }
     ]
   }
