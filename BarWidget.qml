@@ -150,11 +150,11 @@ Panel {
       id: barRow
       anchors.centerIn: parent
       spacing: Style.space(4)
-      scale: button.pressScale
+      scale: button.pressScale !== undefined ? button.pressScale : 1
 
       // The bar's own icon canvas: optically centred and sized like the icons
       // beside it, as BarIconButton draws Omarchy's icons.
-      OpticalGlyph {
+      BarGlyph {
         id: glyph
         width: Style.bar.iconCanvas
         height: Style.bar.iconCanvas
@@ -162,7 +162,6 @@ Panel {
         color: root.glyphColor
         fontFamily: root.fontFamily
         fontSize: Style.bar.iconFont
-        paintedSize: Style.bar.iconSize
 
         Behavior on color {
           enabled: !root.bar || root.bar.foregroundAnimationEnabled

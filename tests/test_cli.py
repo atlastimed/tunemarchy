@@ -303,6 +303,7 @@ class CallbackTests(unittest.TestCase):
     def test_wait_for_code_rejects_other_paths(self):
         port = free_port()
         statuses = []
+        visits = []
 
         def ready():
             def go():
@@ -310,9 +311,13 @@ class CallbackTests(unittest.TestCase):
                 statuses.append(visit(f"http://127.0.0.1:{port}/callback?state=s"))
                 statuses.append(visit(f"http://127.0.0.1:{port}/callback?state=s&code=c"))
 
-            threading.Thread(target=go, daemon=True).start()
+            visits.append(threading.Thread(target=go, daemon=True))
+            visits[0].start()
 
         self.assertEqual(callback.wait_for_code(port, "s", 10, on_ready=ready), "c")
+        # The server answers the last visit before the client has read the
+        # response: wait for the client to record it.
+        visits[0].join(5)
         self.assertEqual(statuses, [404, 400, 200])
 
 
