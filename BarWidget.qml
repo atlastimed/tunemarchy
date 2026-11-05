@@ -135,7 +135,7 @@ Panel {
     bar: root.bar
     labelVisible: false
     hasVisualContent: true
-    fixedWidth: root.vertical ? -1 : barRow.implicitWidth + Style.space(14)
+    fixedWidth: root.vertical ? -1 : (root.label !== "" ? Math.ceil(barRow.implicitWidth + scaledHorizontalMargin * 2) : Style.bar.iconSlot)
     fixedHeight: root.vertical ? barRow.implicitHeight + Style.space(12) : -1
     tooltipText: root.opened ? "" : Model.tooltip(root.running, root.title, root.artist, root.playing)
 
@@ -149,16 +149,20 @@ Panel {
     Row {
       id: barRow
       anchors.centerIn: parent
-      spacing: Style.space(6)
+      spacing: Style.space(4)
+      scale: button.pressScale
 
-      Text {
+      // The bar's own icon canvas: optically centred and sized like the icons
+      // beside it, as BarIconButton draws Omarchy's icons.
+      OpticalGlyph {
         id: glyph
-        anchors.verticalCenter: parent.verticalCenter
-        textFormat: Text.PlainText
+        width: Style.bar.iconCanvas
+        height: Style.bar.iconCanvas
         text: "󰓇"
         color: root.glyphColor
-        font.family: root.fontFamily
-        font.pixelSize: Style.font.body
+        fontFamily: root.fontFamily
+        fontSize: Style.bar.iconFont
+        paintedSize: Style.bar.iconSize
 
         Behavior on color {
           enabled: !root.bar || root.bar.foregroundAnimationEnabled
@@ -166,16 +170,26 @@ Panel {
         }
       }
 
-      Text {
-        anchors.verticalCenter: parent.verticalCenter
+      Item {
         visible: root.label !== ""
-        width: Math.min(root.maxWidth, implicitWidth)
-        textFormat: Text.PlainText
-        text: root.label
-        elide: Text.ElideRight
-        color: root.playing ? root.barForeground : Qt.darker(root.barForeground, 1.3)
-        font.family: root.fontFamily
-        font.pixelSize: Style.font.body
+        width: trackTitle.width
+        height: Style.bar.iconCanvas
+
+        Text {
+          id: trackTitle
+          width: Math.min(root.maxWidth, implicitWidth)
+          textFormat: Text.PlainText
+          text: root.label
+          elide: Text.ElideRight
+          color: root.playing ? root.barForeground : Qt.darker(root.barForeground, 1.3)
+          font.family: root.fontFamily
+          font.pixelSize: Style.font.body
+          renderType: Text.NativeRendering
+          // Centre the figures, not the line box, as the bar's labels do.
+          y: (parent.height - height) / 2 + (titleMetrics.descent - titleMetrics.ascent + titleMetrics.tightBoundingRect("0").height) / 2
+        }
+
+        FontMetrics { id: titleMetrics; font: trackTitle.font }
       }
     }
   }
