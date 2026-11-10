@@ -31,3 +31,12 @@ test('settings and controls handle malformed values and limits', () => {
   assert.equal(model.formatTime(61),'1:01');
   assert.equal(model.barLabel('Title','Artist',false),'Title');
 });
+test('bar label gives way to the room the bar has left', () => {
+  assert.equal(model.labelWidth(300, 240, Infinity, 48), 240);
+  assert.equal(model.labelWidth(120, 240, undefined, 48), 120);
+  assert.equal(model.labelWidth(300, 240, 150, 48), 150);
+  assert.equal(model.labelWidth(100, 240, 150, 48), 100);
+  assert.equal(model.labelWidth(300, 240, 47, 48), 0);
+  assert.equal(model.labelWidth(300, 240, -20, 48), 0);
+  assert.equal(model.labelWidth(300, 0, 500, 48), 0);
+});

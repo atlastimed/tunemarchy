@@ -31,6 +31,16 @@ function formatTime(value) {
 function barLabel(title, artist, showArtist) {
   return title ? title + (showArtist && artist ? "  ·  " + artist : "") : (showArtist ? artist : "")
 }
+// How wide the bar label may be: its own width, the user's cap, and whatever the
+// bar has left before the next section. 0 when only a few letters would fit,
+// since the icon alone says more than that.
+function labelWidth(natural, cap, room, minimum) {
+  var width = Math.min(Math.max(0, Number(natural) || 0), Math.max(0, Number(cap) || 0))
+  var limit = Number(room)
+  if (!isFinite(limit)) return width
+  if (limit < (Number(minimum) || 0)) return 0
+  return Math.min(width, limit)
+}
 // Shared Omarchy tooltip components use AutoText.
 function tooltipText(value) {
   return "<span>" + String(value || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</span>"

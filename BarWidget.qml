@@ -14,8 +14,13 @@ BarWidget {
   readonly property string scrollAction: Model.normalizeEnum(setting("scrollAction", "volume"), Model.SCROLL_ACTIONS, "volume")
   readonly property bool running: spotify && spotify.running
   readonly property bool playing: spotify && spotify.playing
-  readonly property string label: spotify && maxWidth > 0 && !vertical
+  readonly property string trackText: spotify
     ? Model.barLabel(spotify.title, spotify.artist, showArtist) : ""
+  // What the bar can spare for the words before this entry reaches the next section.
+  readonly property real labelRoom: button.baseWidth + room.allowance - button.labelChrome
+  readonly property real labelWidth: maxWidth > 0 && !vertical && trackText !== ""
+    ? Model.labelWidth(Math.ceil(labelMetrics.advanceWidth) + 1, Style.space(maxWidth), labelRoom, Style.space(48)) : 0
+  readonly property string label: labelWidth > 0 ? trackText : ""
   readonly property bool opened: panel.opened
   readonly property bool popoutSwitchClosing: panel.popoutSwitchClosing
   readonly property real openPanelIndicatorWidth: button.width - Style.space(12)
@@ -35,9 +40,11 @@ BarWidget {
     bar: root.bar
     labelVisible: false
     hasVisualContent: true
+    readonly property real baseWidth: Math.max(Style.bar.iconSlot, Style.bar.iconCanvas + scaledHorizontalMargin * 2)
+    readonly property real labelChrome: Style.bar.iconCanvas + Style.space(6) + scaledHorizontalMargin * 2
     fixedWidth: root.vertical ? -1 : Math.max(Style.bar.iconSlot, row.implicitWidth + scaledHorizontalMargin * 2)
     fixedHeight: root.vertical ? Style.bar.iconSlot : -1
-    tooltipText: root.opened ? "" : Model.tooltipText(root.label || strings.t("open"))
+    tooltipText: root.opened ? "" : Model.tooltipText(root.trackText || strings.t("open"))
     onPressed: function(b) {
       if (b === Qt.MiddleButton && root.spotify) root.spotify.playPause()
       else if (b === Qt.RightButton && root.spotify) root.spotify.launch()
@@ -66,7 +73,7 @@ BarWidget {
       Text {
         visible: root.label !== ""
         anchors.verticalCenter: parent.verticalCenter
-        width: Math.min(implicitWidth, Style.space(root.maxWidth))
+        width: Math.ceil(root.labelWidth)
         text: root.label
         textFormat: Text.PlainText
         color: button.foreground
@@ -75,6 +82,20 @@ BarWidget {
         elide: Text.ElideRight
       }
     }
+  }
+  TextMetrics {
+    id: labelMetrics
+    text: root.trackText
+    font.family: button.fontFamily
+    font.pixelSize: Style.font.body
+  }
+  BarRoom {
+    id: room
+    widget: root
+    baseWidth: button.baseWidth
+    edge: root.fixedEdge
+    gap: Style.space(12)
+    active: root.visible && !root.vertical
   }
   PlayerPanel {
     id: panel
