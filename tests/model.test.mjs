@@ -40,3 +40,14 @@ test('bar label gives way to the room the bar has left', () => {
   assert.equal(model.labelWidth(300, 240, -20, 48), 0);
   assert.equal(model.labelWidth(300, 0, 500, 48), 0);
 });
+test('a label with no room for the artist keeps the whole title instead', () => {
+  const both = {text: 'Title  ·  Artist', width: 200};
+  const title = {text: 'Title', width: 90};
+  // Results come from another context, so they are compared by value.
+  const fit = (...args) => JSON.stringify(model.fitLabel(...args));
+  assert.equal(fit(both, title, 240, Infinity, 48), '{"text":"Title  ·  Artist","width":200}');
+  assert.equal(fit(both, title, 240, 150, 48), '{"text":"Title","width":90}');
+  assert.equal(fit(both, title, 240, 70, 48), '{"text":"Title","width":70}');
+  assert.equal(fit(both, title, 240, 20, 48), '{"text":"","width":0}');
+  assert.equal(fit(both, both, 0, Infinity, 48), '{"text":"","width":0}');
+});

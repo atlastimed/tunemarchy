@@ -18,9 +18,13 @@ BarWidget {
     ? Model.barLabel(spotify.title, spotify.artist, showArtist) : ""
   // What the bar can spare for the words before this entry reaches the next section.
   readonly property real labelRoom: button.baseWidth + room.allowance - button.labelChrome
-  readonly property real labelWidth: maxWidth > 0 && !vertical && trackText !== ""
-    ? Model.labelWidth(Math.ceil(labelMetrics.advanceWidth) + 1, Style.space(maxWidth), labelRoom, Style.space(48)) : 0
-  readonly property string label: labelWidth > 0 ? trackText : ""
+  readonly property var fitted: maxWidth > 0 && !vertical && trackText !== ""
+    ? Model.fitLabel({text: trackText, width: Math.ceil(labelMetrics.advanceWidth) + 1},
+      {text: titleMetrics.text, width: Math.ceil(titleMetrics.advanceWidth) + 1},
+      Style.space(maxWidth), labelRoom, Style.space(48))
+    : ({text: "", width: 0})
+  readonly property real labelWidth: fitted.width
+  readonly property string label: fitted.text
   readonly property bool opened: panel.opened
   readonly property bool popoutSwitchClosing: panel.popoutSwitchClosing
   readonly property real openPanelIndicatorWidth: button.width - Style.space(12)
@@ -86,6 +90,12 @@ BarWidget {
   TextMetrics {
     id: labelMetrics
     text: root.trackText
+    font.family: button.fontFamily
+    font.pixelSize: Style.font.body
+  }
+  TextMetrics {
+    id: titleMetrics
+    text: root.spotify && root.spotify.title ? root.spotify.title : root.trackText
     font.family: button.fontFamily
     font.pixelSize: Style.font.body
   }

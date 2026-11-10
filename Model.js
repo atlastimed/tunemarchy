@@ -41,6 +41,15 @@ function labelWidth(natural, cap, room, minimum) {
   if (limit < (Number(minimum) || 0)) return 0
   return Math.min(width, limit)
 }
+// Which words the bar shows. Title and artist when both fit; otherwise the title
+// alone, since a whole title reads better than one cut off before the artist.
+function fitLabel(both, title, cap, room, minimum) {
+  var limit = Number(room)
+  var space = Math.min(Math.max(0, Number(cap) || 0), isFinite(limit) ? limit : Infinity)
+  var pick = both.width <= space ? both : title
+  var width = labelWidth(pick.width, cap, room, minimum)
+  return width > 0 ? {text: pick.text, width: width} : {text: "", width: 0}
+}
 // Shared Omarchy tooltip components use AutoText.
 function tooltipText(value) {
   return "<span>" + String(value || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</span>"
