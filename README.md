@@ -7,13 +7,15 @@ OmaSpotify owns playback, your library and the account connection.
 
 ## Install
 
-Install both plugins, then hide OmaSpotify's own bar entry:
+Install both plugins:
 
 ```bash
 omarchy plugin add https://github.com/atlastimed/omaspotify.git --enable
 omarchy plugin add https://github.com/atlastimed/tunemarchy.git --enable
-omarchy bar set io.github.atlastimed.omaspotify showBarWidget false --json
 ```
+
+OmaSpotify's own bar entry steps aside while Tunemarchy is in the bar, so there
+is one Spotify icon.
 
 Click Tunemarchy and choose **Open** to set up OmaSpotify. A personal Spotify
 Premium account and your own Spotify Developer app are required. Add
@@ -48,9 +50,14 @@ Use `omarchy bar set atlastimed.tunemarchy <key> <value>`:
 | Key | Default | Meaning |
 | --- | --- | --- |
 | `showArtist` | `true` | Include the artist in the bar |
-| `maxWidth` | `240` | Label width at the base UI scale; `0` for icon only |
+| `maxWidth` | `240` | Widest the label may be at the base UI scale; `0` for icon only |
 | `whenClosed` | `icon` | Keep an icon or `hide` when no player is available |
 | `scrollAction` | `volume` | `volume`, `skip`, or `off` |
+
+The label never runs into the next part of the bar. Omarchy lays its bar
+sections out independently, so the widget measures the room it has: a title and
+artist that will not fit become the title alone, then a shortened title, then
+the icon.
 
 Existing IPC shortcuts remain available: `omarchy-shell tunemarchy playPause`,
 `next`, `previous`, `like`, `seek 10`, and `status`. To toggle the panel:
