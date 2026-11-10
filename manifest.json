@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "atlastimed.tunemarchy",
   "name": "Tunemarchy",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": "atlastimed",
   "license": "MIT",
   "description": "Compact OmaSpotify companion: album art, playback controls, expandable queue and devices.",
